@@ -39,16 +39,16 @@ client.connect(err => {
     // all service api
     app.get('/service', (req, res) => {
         serviceCollection.find({})
-        .toArray( (err, documents) => {
-            res.send(documents);
-        })
+            .toArray((err, documents) => {
+                res.send(documents);
+            })
     })
 
     app.get('/getService', (req, res) => {
-        serviceCollection.find({name: req.query.name})
-        .toArray( (err, documents) => {
-            res.send(documents[0]);
-        })
+        serviceCollection.find({ name: req.query.name })
+            .toArray((err, documents) => {
+                res.send(documents[0]);
+            })
     })
 
     app.post('/addService', (req, res) => {
@@ -86,9 +86,9 @@ client.connect(err => {
     // all user order api
     app.get('/orders', (req, res) => {
         orderCollection.find({})
-        .toArray( (err, documents) => {
-            res.send(documents);
-        })
+            .toArray((err, documents) => {
+                res.send(documents);
+            })
     })
 
 
@@ -101,20 +101,20 @@ client.connect(err => {
                     const tokenEmail = decodedToken.email;
                     const queryEmail = req.query.email;
                     if (tokenEmail === queryEmail) {
-                        orderCollection.find({email: queryEmail})
-                            .toArray( (err,documents) => {
+                        orderCollection.find({ email: queryEmail })
+                            .toArray((err, documents) => {
                                 res.status(200).send(documents);
-                                
+
                             })
                     }
-                    else{
+                    else {
                         res.status(401).send('Un-Authorized Access!!')
                     }
                 }).catch(function (error) {
                     res.status(401).send('Un-Authorized Access!!')
                 });
         }
-        else{
+        else {
             res.status(401).send('Un-Authorized Access!!')
         }
     })
@@ -159,59 +159,34 @@ client.connect(err => {
     // all review api
     app.get('/review', (req, res) => {
         reviewCollection.find({})
-        .toArray( (err, documents) => {
-            res.send(documents);
-        })
+            .toArray((err, documents) => {
+                res.send(documents);
+            })
     })
 
     app.post('/addReview', (req, res) => {
-        const file = req.files.file;
-        const name = req.body.name;
-        const company = req.body.company;
-        const email = req.body.email;
-        const review = req.body.review;
-
-        const filePath = `${__dirname}/reviews/${file.name}`;
-        file.mv(filePath, err => {
-            if (err) {
-                console.log(err);
-            }
-            const newImg = fs.readFileSync(filePath);
-            const encImg = newImg.toString('base64');
-
-            const image = {
-                contentType: req.files.file.mimetype,
-                size: req.files.file.size,
-                img: Buffer.from(encImg, 'base64')
-            }
-            reviewCollection.insertOne({ name, company, email, review, image })
-                .then(result => {
-                    fs.remove(filePath, err => {
-                        if (err) {
-                            console.log(err);
-                        }
-                        res.send(result.insertedCount > 0)
-                    })
-                })
-        })
-
+        const review = req.body;
+        reviewCollection.insertOne(review)
+            .then(result => {
+                res.send(result.insertedCount > 0)
+            })
     })
 
     // all admin api
     app.get('/getAdmin', (req, res) => {
         const email = req.query.email;
-        adminCollection.find({email: email})
-        .toArray((err, documents) => {
-            res.send(documents);
-        })
+        adminCollection.find({ email: email })
+            .toArray((err, documents) => {
+                res.send(documents);
+            })
     })
 
     app.post('/addAdmin', (req, res) => {
-        const admin= req.body;
+        const admin = req.body;
         adminCollection.insertOne(admin)
-        .then(result => {
-            res.send(result.insertedCount > 0)
-        })
+            .then(result => {
+                res.send(result.insertedCount > 0)
+            })
     })
 
 
