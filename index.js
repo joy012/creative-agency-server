@@ -29,11 +29,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 const port = 2840;
 
-app.get('/', (req, res) => {
-    res.send('Hello World')
-})
-
-
 
 client.connect(err => {
     const serviceCollection = client.db("creativeAgency").collection("service");
