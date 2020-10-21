@@ -12,7 +12,7 @@ require('dotenv').config()
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: `${process.env.SITE_NAME}`
+    databaseURL: `https://creativeAgency.firebaseio.com;`
 });
 
 
